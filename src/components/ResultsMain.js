@@ -35,7 +35,7 @@ const ResultsMain = (props) => {
                         </Link>
                         ):
                         <div className="matches" style={{flexDirection: "column", textAlign:"center", alignItems:"center", padding:"200px 0"}}>
-                            <h1>There are no recipes matching your search.</h1>
+                            <h1>There are no recipes matching your search/filter.</h1>
                             <button onClick={()=>window.location.reload()} style={{width:"100px", height:"39px"}}>Back</button>
                         </div>}
                 </div>

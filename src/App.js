@@ -5,28 +5,20 @@ import Footer from './components/Footer'
 import Navigation from './components/navigation'
 import RecipePage from './RecipePage'
 
-
-// API SETUP INFORMATION
-const contentful = require('contentful')
-const client = contentful.createClient({
-  space: 'on7xb2olivy7',
-  environment: 'master', // defaults to 'master' if not set
-  accessToken: process.env.REACT_APP_SECRET_SAUCE_DELIVERY_API_TOKEN
-})
-
-
 function App() {
   const [searchToggle, setSearchToggle] = useState(0)
   const [search, setSearch] = useState()
   const [recipes, setRecipes] = useState()
   const [initial, setInitial] = useState()
   const [catFilter, setCatFilter] = useState([])
-  const [firstRun, setFirstRun] = useState(true);
+  const [filterMatch, setFilterMatch] = useState()
+  // const [firstRun, setFirstRun] = useState(true);
   const history = useHistory();
 
 
 //HELPER FUNCTIONS
   const searchHandler = (searchquery) => {
+    console.log(searchquery)
     history.push('/')
     if (searchquery.length > 0) {
     setSearchToggle(1)
@@ -37,17 +29,35 @@ function App() {
 
      
   const filterHandler = (filter) => {
-    setCatFilter(filter);
-    setRecipes(recipes.filter(x => catFilter.every(y => 
-      {return x.fields.categories.some(z => 
-          z.fields.categoryTitle === y)
-          })
-      ))
+    if (filter.length === 0) {
+      setFilterMatch([])
+    } else {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    filter.map((cat, index) => 
+          urlencoded.append(index, cat)
+    )
+
+    var requestOptionsFilter = {
+      method: 'POST',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow'
+    };
+    
+    fetch("https://saucy-secret.herokuapp.com/filter/", requestOptionsFilter)
+      .then(response => response.json())
+      .then(result => setRecipes(result))
+      .catch(error => console.log('error', error));
+    }
   }
 
   
   const resetFilter = () => {
     setCatFilter([])
+    setFilterMatch()
   }
   const requestOptions = {
     method: 'GET',
@@ -62,31 +72,22 @@ function App() {
     .then(result => setInitial(result))
     .catch(error => console.log('error', error));
 
-    if (searchToggle === 0){
-      fetch("https://saucy-secret.herokuapp.com/", requestOptions)
-      .then(response => response.json())
-      .then(result => setRecipes(result))
-      .catch(error => console.log('error', error));
-      }
-
-    else {
+    if (searchToggle === 1){
       fetch(`https://saucy-secret.herokuapp.com/search/${search}`, requestOptions)
       .then(response => response.json())
       .then(result => setRecipes(result))
       .catch(error => console.log('error', error));
       }
-
-    if (!firstRun) {
-      setRecipes(initial.filter(x => catFilter.every(y => x.fields.categories.some(z => z.fields.categoryTitle === y))))
-    } else setFirstRun(false)
-
+    
+    else if (!filterMatch) {
+      fetch("https://saucy-secret.herokuapp.com/", requestOptions)
+      .then(response => response.json())
+      .then(result => setRecipes(result))
+      .catch(error => console.log('error', error));
+    }
 
   },[search, searchToggle])
   
-
-
-
-
 
   // RETURN
   return (
@@ -104,3 +105,6 @@ function App() {
 }
 
 export default App;
+
+
+

@@ -37,20 +37,12 @@ function Navigation({ onSearch,  getFilter }) {
               <MenuIcon onClick={toggleCategories} style={{cursor: 'pointer'}}/>
             </Hidden>
 
-
             <Hidden xsDown>
-              <NavSearch onSearch={onSearch} closeCategories={setCat_toggler}/>
-              {/* <div className="navbar_search edge-margin">
-                <form onSubmit={(e)=>{e.preventDefault(); onSearch(e.target[0].value)}}>
-                  <input className="navbar_search" type="text" placeholder="Search for recipe.."></input>
-                  <button className="navbar_search">OK</button>
-                </form>
-              </div> */}
+              <NavSearch onSearch={onSearch} closeCategories={toggleCategories}/>
             </Hidden>
             
-            
           </div>
-          {cat_toggler===true?<Categories getFilter={getFilter} />:""}
+          {cat_toggler===true?<Categories getFilter={getFilter} closeCategories={toggleCategories} onSearch={onSearch} />:""}
         </div>
       </ClickAwayListener>
     </div>

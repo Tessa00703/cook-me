@@ -9,7 +9,7 @@ var requestOptions = {
 };
 
 
-function Category({ getFilter }) {
+function Category({ getFilter, closeCategories, onSearch }) {
   const [catData, setCatData] = useState()
   const [mainCatData, setMainCatData] = useState()
 
@@ -29,9 +29,8 @@ function Category({ getFilter }) {
   const handleCheckboxFilter = (e) => {
       let tempData = []
       for(let i = 0; i < e.currentTarget.length; i++)
-
-      { if(e.currentTarget[i].checked) {
-          tempData.push(e.currentTarget[i].name)
+        { if(e.currentTarget[i].checked) {
+          tempData.push(e.currentTarget[i].id)
         }
       }
       getFilter(tempData)
@@ -48,7 +47,7 @@ function Category({ getFilter }) {
       >
       <Hidden smUp>
         <div className='mobile-search'>
-          <NavSearch />
+          <NavSearch onSearch={onSearch}/>
         </div>
       </Hidden>
       <form className={`cat-form ${handleCatFormWidth}` } onChange={(e) => handleCheckboxFilter(e)}>
@@ -60,13 +59,14 @@ function Category({ getFilter }) {
             {catData !== undefined?catData.map(cat => {
               if (mainCat.main_cat_id === cat.parent_category) {
                 return (
-                <label class='container'>
+                <label className='container' key={cat.category_id}>
                   {cat.category_title}
                   <input 
                     name={cat.category_title} 
+                    id={cat.category_id}
                     type="checkbox" 
                   />
-                  <span class="checkmark"></span>
+                  <span className="checkmark"></span>
                   </label>
                 )}
                 })
@@ -74,7 +74,7 @@ function Category({ getFilter }) {
           </div>
           ):""}
           <Hidden smUp>
-          <button className='mobile-accept-cats'>Set filters</button>
+          <button className='mobile-accept-cats' type="button" onClick={closeCategories}>Set filters</button>
           </Hidden>
           </form>
       </div>

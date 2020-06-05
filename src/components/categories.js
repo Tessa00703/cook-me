@@ -3,10 +3,10 @@ import Category from './category'
 import './categories.css';
 
 
-function Categories({getFilter}) {
+function Categories({getFilter, closeCategories, onSearch}) {
     return (
         <div className="categories" id="categories">
-        <Category getFilter={getFilter} />
+        <Category getFilter={getFilter} closeCategories={closeCategories} onSearch={onSearch}/>
         </div>
     );
   }
