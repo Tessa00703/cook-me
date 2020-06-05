@@ -12,8 +12,12 @@ function App() {
   const [initial, setInitial] = useState()
   const [catFilter, setCatFilter] = useState([])
   const [filterMatch, setFilterMatch] = useState()
-  // const [firstRun, setFirstRun] = useState(true);
   const history = useHistory();
+
+  const requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
 
 
 //HELPER FUNCTIONS
@@ -26,12 +30,16 @@ function App() {
     resetFilter()
     }
   }
-
      
   const filterHandler = (filter) => {
+    setCatFilter(filter)
     if (filter.length === 0) {
-      setFilterMatch([])
-    } else {
+    fetch(`https://saucy-secret.herokuapp.com/`, requestOptions)
+      .then(response => response.json())
+      .then(result => setRecipes(result))
+      .catch(error => console.log('error', error));
+    } 
+    else {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -53,20 +61,13 @@ function App() {
       .catch(error => console.log('error', error));
     }
   }
-
   
   const resetFilter = () => {
     setCatFilter([])
     setFilterMatch()
   }
-  const requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
 
-// USE EFFECTS
-
-  useEffect(()=>{
+ useEffect(()=>{
     fetch("https://saucy-secret.herokuapp.com/", requestOptions)
     .then(response => response.json())
     .then(result => setInitial(result))

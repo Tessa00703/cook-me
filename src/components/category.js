@@ -19,6 +19,7 @@ function Category({ getFilter, closeCategories, onSearch }) {
       .then(result => setMainCatData(result))
       .catch(error => console.log('error', error));
 
+
       fetch("https://saucy-secret.herokuapp.com/cat/", requestOptions)
       .then(response => response.json())
       .then(result => setCatData(result))
