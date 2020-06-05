@@ -22,7 +22,6 @@ function App() {
 
 //HELPER FUNCTIONS
   const searchHandler = (searchquery) => {
-    console.log(searchquery)
     history.push('/')
     if (searchquery.length > 0) {
     setSearchToggle(1)
@@ -32,6 +31,7 @@ function App() {
   }
      
   const filterHandler = (filter) => {
+    setSearchToggle(0)
     setCatFilter(filter)
     if (filter.length === 0) {
     fetch(`https://saucy-secret.herokuapp.com/`, requestOptions)

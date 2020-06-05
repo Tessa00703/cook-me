@@ -39,13 +39,16 @@ const ResultsMain = (props) => {
     return (
         <>
             <div className='results-cards'>
+                {props.searchToggle === 1?<h1 className='main-results'> {`Searched: ${props.search}`}</h1>:<h1 className='main-results'>{"Latest Recipes"}</h1>}
+
+
                 {/* {if(props.searchToggle === 1){ return(
                     <h1 className='main-results'> {`Searched: ${props.search}`}</h1>)
                 } else if (selectedFilter.length > 1) { return(
                     <h1 className='main-results'>{""}</h1>)}           
-                else { return ( */}
+                else { return ( 
                     <h1 className='main-results'>{"Latest Recipes"}</h1>
-                {/* )}} */}
+                )}} */}
                                     
                 {props.filters.length>0?
                 <div className="matches">
