@@ -65,6 +65,7 @@ function App() {
   const resetFilter = () => {
     setCatFilter([])
     setFilterMatch()
+    filterHandler([])
   }
 
  useEffect(()=>{
